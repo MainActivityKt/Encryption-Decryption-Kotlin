@@ -1,12 +1,9 @@
 package encryptdecrypt
 
+import utils.MODE
 import utils.Utils.decryptMessage
 import utils.Utils.encryptMessage
 
-
-private enum class MODE(val function: (String, Int) -> String) {
-    ENC(encryptMessage), DEC(decryptMessage)
-}
 
 fun main(args: Array<String>) {
 
