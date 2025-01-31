@@ -1,10 +1,10 @@
 package encryptdecrypt
 
-import utils.MODE
+import utils.Mode
 import java.io.File
 
 data class Option(
-    val mode: MODE,
+    val mode: Mode,
     val key: Int = 0,
     val data: String = "",
     val inputFile: File?,

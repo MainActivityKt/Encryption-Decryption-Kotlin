@@ -1,6 +1,7 @@
 package encryptdecrypt
 
-import utils.MODE
+import utils.Algorithm
+import utils.Mode
 import utils.Utils.decryptMessage
 import utils.Utils.encryptMessage
 import java.io.File
@@ -11,8 +12,6 @@ import java.io.File
  */
 
 fun parseValue(argumentName: String, args: Array<String>): String? {
-
-
     val argIndex = args.indexOf("-$argumentName")
     if (argIndex != -1) {
         val argValue = args.getOrNull(argIndex + 1)
@@ -24,12 +23,16 @@ fun parseValue(argumentName: String, args: Array<String>): String? {
     return ""
 }
 
-fun performOperation(encryptionMode: MODE, key: Int, data: String, inputFile: File?, outputFile: File?) {
+fun performOperation(
+    encryptionMode: Mode,
+    key: Int, data: String,
+    algorithm: Algorithm,
+    inputFile: File?, outputFile: File?) {
     val inputData = data.ifEmpty { inputFile!!.readText() }
 
     val outputData = when(encryptionMode) {
-        MODE.ENC -> encryptMessage(inputData, key)
-        MODE.DEC -> decryptMessage(inputData, key)
+        Mode.ENC -> encryptMessage(inputData, key, algorithm)
+        Mode.DEC -> decryptMessage(inputData, key, algorithm)
     }
 
     if (outputFile != null) {
@@ -42,25 +45,35 @@ fun performOperation(encryptionMode: MODE, key: Int, data: String, inputFile: Fi
 
 
 fun main(args: Array<String>) {
-    val encryptionMode = when (parseValue("mode", args)) {
-        "enc", "" -> MODE.ENC
-        "dec" -> MODE.DEC
+    val mode = when (parseValue("mode", args)) {
+        "enc", "" -> Mode.ENC
+        "dec" -> Mode.DEC
         else -> null
     }
     val key = parseValue("key", args)
     val data = parseValue("data", args)
+    val algorithm = when(parseValue("alg", args)) {
+        "unicode" -> Algorithm.UNICODE
+        null -> null
+        else -> Algorithm.SHIFT
+    }
 
     val inputPath = parseValue("in", args)
     val outputPath = parseValue("out", args)
 
-    if (encryptionMode == null || key == null ||
+    if (mode == null || key == null ||
         data == null || inputPath == null || outputPath == null || key.toIntOrNull() == null ||
-        data.isEmpty() && inputPath.isEmpty()
+        algorithm == null || data.isEmpty() && inputPath.isEmpty()
     ) {
         println("Error: Unable to parse arguments")
         return
     }
-    performOperation(encryptionMode,key.toInt(), data, if (data.isEmpty()) File(inputPath) else null,
-        if (outputPath.isNotEmpty()) File(outputPath) else null,
+    performOperation(
+        encryptionMode = mode,
+        key = key.toInt(),
+        data = data,
+        algorithm = algorithm,
+        inputFile = if (data.isEmpty()) File(inputPath) else null,
+        outputFile = if (outputPath.isNotEmpty()) File(outputPath) else null,
     )
 }

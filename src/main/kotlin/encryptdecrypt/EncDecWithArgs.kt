@@ -1,6 +1,7 @@
 package encryptdecrypt
 
-import utils.MODE
+import utils.Algorithm
+import utils.Mode
 import utils.Utils.decryptMessage
 import utils.Utils.encryptMessage
 
@@ -18,16 +19,16 @@ fun main(args: Array<String>) {
     }
 
     val mode = when(args.indexOf("-mode")) {
-        -1 -> MODE.ENC
+        -1 -> Mode.ENC
         else -> {
             val data = args[args.indexOf("-mode") + 1]
-            MODE.valueOf(data.uppercase())
+            Mode.valueOf(data.uppercase())
         }
     }
 
 
     println(when(mode) {
-        MODE.ENC -> encryptMessage(text, key)
-        MODE.DEC -> decryptMessage(text, key)
+        Mode.ENC -> encryptMessage(text, key, Algorithm.UNICODE)
+        Mode.DEC -> decryptMessage(text, key, Algorithm.UNICODE)
     })
 }
