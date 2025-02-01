@@ -134,7 +134,7 @@ encryption and decryption, in that order. If it's not specified, the default is 
 - `-out`: Specified the path of output txt file. The output is printed out if this argument is missing.
 - `-alg`: Specifies the algorithm used for encryption/decryption, "unicode" or "shift", in that order. Default value: "shift".
 
-If there is something strange (an input file does not exist, or an argument doesn't have a value)
+If there is something strange (an input file does not exist, or an argument doesn't have a value), the program gets terminated with a clear error message.
 
 [Open stage 4 on Hyperskill](https://hyperskill.org/projects/279/stages/1419/implement)
 
